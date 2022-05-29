@@ -7,6 +7,10 @@
     <title>Document</title>
 
     <style>
+        * {
+            list-style: none;
+        }
+
         header {
             background-color: lightgreen;
             padding: 2em;
@@ -16,9 +20,7 @@
 </head>
 <body>
 
-    <header>
-        <h1>Hello <?= $name ?></h1>
-    </header>
+    <?php require 'partials/nav.view.php' ?>
     
     <!-- <ul>
         <?php foreach($names as $i=> $name): ?>
