@@ -1,0 +1,13 @@
+* {
+    list-style: none;
+}
+
+header {
+    background-color: lightgreen;
+    padding: 2em;
+    text-align: center;
+}
+
+body {
+    background-color: antiquewhite;
+}

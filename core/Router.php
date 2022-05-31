@@ -1,8 +1,13 @@
 <?php
 
+namespace App\Core;
+
 class Router {
 
-    protected $routes = [];
+    public $routes = [
+        'GET'=> [],
+        'POST'=> [],
+    ];
 
 
     public static function load($file) {
@@ -14,19 +19,59 @@ class Router {
         return $router;
     }
 
-    public function define($routes) {
-        $this->routes = $routes;
+
+    public function get($uri, $controller) {
+        
+        $this->routes['GET'][$uri] = $controller;
+
     }
 
 
-    public function direct($uri) {
+    public function post($uri, $controller) {
+
+        $this->routes['POST'][$uri] = $controller;
         
-        if (array_key_exists($uri, $this->routes)) {
-            return $this->routes[$uri];
+    }
+
+
+    public function direct($uri, $requestType) {
+        
+        if (array_key_exists($uri, $this->routes[$requestType])) {
+
+            //  PagesController@home
+            // die($this->routes[$requestType][$uri]);
+
+            // explode('@', $this->routes[$returnType][$uri])
+
+            /****
+             * ... -> will make those string into the functions argument
+             * 
+             */
+
+            return $this->callAction(
+                ...explode('@', $this->routes[$requestType][$uri])
+            );
+
         }
 
         throw new Exception('No routes define for this routes');
+    }
 
+
+    public function callAction($controller, $action) {
+
+        // die(var_dump($controller, $action));
+
+        $controller = "App\\Controllers\\{$controller}";
+        $controller = new $controller;
+
+        if (! method_exists($controller, $action)) {
+            throw new Exception(
+                "($controller) does not respond to the ($action) action."
+            );
+        }
+
+        return $controller->$action();
     }
 
 }

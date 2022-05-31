@@ -16,4 +16,26 @@ class QueryBuilder {
         $tasks = $statement->fetchAll(PDO::FETCH_CLASS);
         return $tasks;
     }
+
+
+    public function insert($table, $parameters) {
+
+        // die(var_dump(implode(', ', array_keys($parameters))));
+        $sql = sprintf(
+            'insert into %s (%s) values (%s)',
+            $table,
+            implode(', ', array_keys($parameters)),
+            ':'.implode(', :', array_keys($parameters))
+        );
+
+        try {
+            $statement = $this->pdo->prepare($sql);
+            $statement->execute($parameters);
+        } catch(Exception $e) {
+            die('Woops wrong in query');
+        }
+
+        
+
+    }
 }

@@ -1,12 +1,33 @@
 <?php
 
-$config = require 'config.php';
+use App\Core\App;
 
-require 'core/Router.php';
-require 'core/Request.php';
-require 'core/database/Connection.php';
-require 'core/database/QueryBuilder.php';
+App::bind('config', require 'config.php');
 
-return new QueryBuilder(
-    Connection::make($config['database'])
-);
+
+App::bind('database',  new QueryBuilder(
+    Connection::make(App::get('config')['database'])
+));
+
+// require 'core/Router.php';
+// require 'core/Request.php';
+// require 'core/database/Connection.php';
+// require 'core/database/QueryBuilder.php';
+
+//  autoload with composer.json -> autoload => classmap
+
+
+function view($name, $data = []) {
+
+    extract($data);
+
+    return require "app/views/{$name}.view.php";
+
+}
+
+
+function redirect($path) {
+
+    return header("Location: /{$path}");
+    
+}
